@@ -92,7 +92,7 @@ const InterviewDetails = () => {
 
         {/* --- SECTION 2: THE TIMELINE --- */}
         {interviews.length > 0 ? (
-          <div className="relative space-y-10 before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-indigo-50 before:via-indigo-200 before:to-transparent">
+          <div className="relative space-y-10 before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-linear-to-b before:from-indigo-50 before:via-indigo-200 before:to-transparent">
             {interviews.map((round, idx) => (
               <div key={round._id} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
                 
