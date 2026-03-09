@@ -201,7 +201,7 @@ export default function JobDetailsPage() {
 
                       {/* USE THE INTERVIEW _ID HERE TO FETCH PARTICULAR DETAILS */}
                       <button
-                        onClick={() => navigate(`/interview/${item._id}`)}
+                        onClick={() => navigate(`/interviews/${item._id}`)}
                         className="inline-flex items-center gap-2 text-xs font-bold text-indigo-600 hover:text-indigo-700 bg-indigo-50 p-2 rounded-lg transition-colors"
                       >
                         <Eye size={12} /> Full View

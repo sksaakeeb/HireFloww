@@ -48,7 +48,7 @@ const InterviewFormPage = () => {
         type: "success",
         text: "Interview saved & Job status updated!",
       });
-      setTimeout(() => navigate(`/job-details/${jobId}`), 1500);
+      setTimeout(() => navigate(`/job/${jobId}`));
     } catch (error) {
       setMessage({
         type: "error",

@@ -14,6 +14,7 @@ import InterviewFormPage from "@/pages/home/InterviewFormPage";
 import AllInterviewPage from "@/pages/home/AllInterviewPage";
 import AllJobs from "@/pages/home/components/AllJobs";
 import AllJobsPage from "@/pages/home/AllJobsPage";
+import UpdateJobPage from "@/pages/home/UpdateJobPage";
 
 // ProtectedRoute
 const ProtectedRoute = ({ children }) => {
@@ -110,6 +111,15 @@ function AppRouter() {
           element={
             <ProtectedRoute>
               <JobDetailsPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/update-job/:id"
+          element={
+            <ProtectedRoute>
+              <UpdateJobPage />
             </ProtectedRoute>
           }
         />

@@ -40,7 +40,7 @@ const DashboardStats = () => {
       icon: <Activity size={20} />,
       color: "text-amber-600",
       bg: "bg-amber-500/10",
-      path: "/all-interview",
+      path: "/active",
     },
     {
       label: "Offers",
@@ -48,7 +48,7 @@ const DashboardStats = () => {
       icon: <CheckCircle size={20} />,
       color: "text-emerald-600",
       bg: "bg-emerald-500/10",
-      path: "/all-interview",
+      path: "/all-interviews",
     },
     {
       label: "Rejected",
@@ -56,7 +56,7 @@ const DashboardStats = () => {
       icon: <XCircle size={20} />,
       color: "text-rose-600",
       bg: "bg-rose-500/10",
-      path: "/all-interview",
+      path: "/all-interviews",
     },
   ];
 
