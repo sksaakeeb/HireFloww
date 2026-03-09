@@ -22,25 +22,24 @@ export default function Profile() {
   const [updating, setUpdating] = useState(false);
   const [status, setStatus] = useState(null);
 
-  // Fetch Profile Info on Mount
+  const fetchProfile = async () => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/users/profile`,
+        { withCredentials: true },
+      );
+      setFormData(res.data);
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}/users/profile`,
-          { withCredentials: true },
-        );
-        setFormData(res.data);
-      } catch (error) {
-        console.error("Error fetching profile:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchProfile();
   }, []);
 
-  // Update Profile Logic
   const handleUpdate = async (e) => {
     e.preventDefault();
     setUpdating(true);
@@ -54,11 +53,10 @@ export default function Profile() {
       setFormData(res.data);
       setStatus({ type: "success", msg: "Profile updated successfully!" });
 
-      // Auto-close edit mode after 1.5s to show the updated clean view
       setTimeout(() => {
         setIsEditing(false);
         setStatus(null);
-      }, 1500);
+      }, 1000);
     } catch (error) {
       setStatus({ type: "error", msg: "Failed to update profile. Try again." });
     } finally {
@@ -74,7 +72,7 @@ export default function Profile() {
     );
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-indigo-50 via-white to-purple-50 p-6 md:p-12">
+    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_left,var(--tw-gradient-stops))] from-indigo-50 via-white to-purple-50 p-6 md:p-12">
       <div className="max-w-3xl mx-auto">
         {/* Header Section */}
         <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -111,7 +109,7 @@ export default function Profile() {
           {/* Avatar Card (Always Visible) */}
           <div className="bg-white/40 backdrop-blur-xl border border-white/60 p-8 rounded-[2.5rem] shadow-xl flex flex-col md:flex-row items-center gap-8 transition-all">
             <div className="relative group">
-              <div className="w-32 h-32 rounded-full border-4 border-white shadow-lg overflow-hidden bg-gradient-to-tr from-indigo-100 to-purple-100 flex items-center justify-center">
+              <div className="w-32 h-32 rounded-full border-4 border-white shadow-lg overflow-hidden bg-linear-to-tr from-indigo-100 to-purple-100 flex items-center justify-center">
                 {formData.profileImage ? (
                   <img
                     src={formData.profileImage}

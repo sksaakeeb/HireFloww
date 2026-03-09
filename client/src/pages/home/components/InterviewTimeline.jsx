@@ -77,7 +77,7 @@ const InterviewTimeline = () => {
       </h2>
 
       {interviews.length > 0 ? (
-        <div className="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-indigo-200 before:to-transparent">
+        <div className="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-linear-to-b before:from-transparent before:via-indigo-200 before:to-transparent">
           {interviews.map((item) => (
             <div
               key={item._id}
@@ -117,12 +117,12 @@ const InterviewTimeline = () => {
                       </a>
                     )}
 
-                    <button
-                      onClick={() => navigate(`/interviews/${item._id}`)}
+                    {/* <button
+                      onClick={() => navigate(`/interview/${item._id}`)}
                       className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-indigo-600 hover:bg-indigo-50 bg-white border border-indigo-100 px-3 py-2 rounded-xl transition-all"
                     >
                       <Eye size={12} /> Details
-                    </button>
+                    </button> */}
                   </div>
 
                   {/* FIXED DELETE SECTION */}
@@ -133,7 +133,7 @@ const InterviewTimeline = () => {
                   >
                     <button
                       disabled={deletingId === item._id}
-                      className="cursor-pointer p-2.5 rounded-xl bg-red-50 text-red-500 border border-red-100 hover:bg-red-500 hover:text-white transition-all duration-300 flex items-center justify-center min-w-[44px]"
+                      className="cursor-pointer p-2.5 rounded-xl bg-red-50 text-red-500 border border-red-100 hover:bg-red-500 hover:text-white transition-all duration-300 flex items-center justify-center min-w-11"
                     >
                       {deletingId === item._id ? (
                         <Loader2 className="animate-spin" size={18} />
