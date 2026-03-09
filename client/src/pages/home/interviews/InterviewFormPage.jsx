@@ -75,14 +75,11 @@ const InterviewFormPage = () => {
             <ChevronLeft size={20} className="text-gray-600" />
           </button>
           <div className="text-center">
-            <div className="inline-block px-4 py-1.5 mb-3 bg-emerald-500/10 rounded-full text-emerald-600 text-xs font-bold uppercase tracking-widest">
-              Interview Logger
-            </div>
             <h2 className="text-3xl font-black text-gray-800 tracking-tight">
-              Record Interview
+              Add Interview
             </h2>
             <p className="text-gray-500 text-sm mt-1">
-              This will update your application status.
+              Add interview details for this Job.
             </p>
           </div>
         </div>
@@ -92,7 +89,7 @@ const InterviewFormPage = () => {
             {/* Round Type - STRICTLY MATCHING JOB ENUM */}
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-bold text-gray-600 ml-1 flex items-center gap-2">
-                <Layers size={14} /> Interview Phase
+                <Layers size={14} />* Interview Phase
               </label>
               <select
                 name="roundType"
@@ -112,7 +109,7 @@ const InterviewFormPage = () => {
             {/* Date */}
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-bold text-gray-600 ml-1 flex items-center gap-2">
-                <Calendar size={14} /> Date
+                <Calendar size={14} />* Date
               </label>
               <input
                 type="date"

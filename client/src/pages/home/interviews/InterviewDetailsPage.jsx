@@ -5,7 +5,7 @@ import {
   Calendar, ArrowLeft, MessageSquare, Link as LinkIcon, 
   Trash2, Pencil, Loader2, Clock, Plus, Building2, MapPin 
 } from "lucide-react";
-import ConfirmDelete from "../../components/ConfirmDelete";
+import ConfirmDelete from "@/components/ConfirmDelete";
 
 const InterviewDetails = () => {
   const { jobId } = useParams();

@@ -9,14 +9,14 @@ const jobSchema = new mongoose.Schema(
     },
 
     companyName: { type: String, required: true },
-    location: { type: String },
+    location: { type: String, required: true },
     jobRole: { type: String, required: true },
     jobPackage: { type: String },
     driveDate: { type: Date },
 
     status: {
       type: String,
-      enum: ["Applied", "HR", "Tech", "Final", "Offer", "Rejected"],
+      enum: ["Applied", "HR", "Tech", "Offer", "Rejected"],
       default: "Applied",
     },
     notes: { type: String },

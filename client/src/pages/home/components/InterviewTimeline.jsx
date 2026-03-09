@@ -9,13 +9,14 @@ import {
   Loader2,
   Trash2,
 } from "lucide-react";
+import ConfirmDelete from "../../../components/ConfirmDelete";
 
 const InterviewTimeline = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // This is the Job ID
   const navigate = useNavigate();
   const [interviews, setInterviews] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [deletingId, setDeletingId] = useState(null); // Track which item is being deleted
+  const [deletingId, setDeletingId] = useState(null); // Fix: track specific deleting item
 
   const fetchInterviews = async () => {
     try {
@@ -37,24 +38,23 @@ const InterviewTimeline = () => {
     fetchInterviews();
   }, [id]);
 
-  // --- DELETE FUNCTION ---
+  // --- FIXED DELETE FUNCTION ---
   const handleDelete = async (interviewId) => {
-    if (
-      !window.confirm("Are you sure you want to delete this interview round?")
-    )
-      return;
-
-    setDeletingId(interviewId);
+    setDeletingId(interviewId); // Set loading for this specific button
     try {
       await axios.delete(
         `${import.meta.env.VITE_API_BASE_URL}/interviews/${interviewId}`,
         { withCredentials: true },
       );
-      // Optimistic UI Update: Remove the deleted interview from state
+
+      // Optimistic Update: remove from UI immediately
       setInterviews((prev) => prev.filter((item) => item._id !== interviewId));
     } catch (error) {
-      console.error("Delete failed:", error);
-      alert("Failed to delete the interview round.");
+      console.error(
+        "Interview Delete failed:",
+        error.response?.data || error.message,
+      );
+      alert("Failed to delete interview. Check console for details.");
     } finally {
       setDeletingId(null);
     }
@@ -63,7 +63,7 @@ const InterviewTimeline = () => {
   if (loading)
     return (
       <div className="p-10 text-center">
-        <Loader2 className="animate-spin mx-auto text-indigo-500" />
+        <Loader2 className="animate-spin mx-auto text-indigo-500" size={32} />
       </div>
     );
 
@@ -77,7 +77,7 @@ const InterviewTimeline = () => {
       </h2>
 
       {interviews.length > 0 ? (
-        <div className="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-linear-to-b before:from-transparent before:via-indigo-200 before:to-transparent">
+        <div className="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-indigo-200 before:to-transparent">
           {interviews.map((item) => (
             <div
               key={item._id}
@@ -125,19 +125,23 @@ const InterviewTimeline = () => {
                     </button>
                   </div>
 
-                  {/* DELETE BUTTON */}
-                  <button
-                    onClick={() => handleDelete(item._id)}
-                    disabled={deletingId === item._id}
-                    className="p-2.5 rounded-xl bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white border border-rose-100 transition-all shadow-sm active:scale-90"
-                    title="Delete Round"
+                  {/* FIXED DELETE SECTION */}
+                  <ConfirmDelete
+                    title="Delete Interview Round?"
+                    description="This action cannot be undone."
+                    onConfirm={() => handleDelete(item._id)}
                   >
-                    {deletingId === item._id ? (
-                      <Loader2 size={16} className="animate-spin" />
-                    ) : (
-                      <Trash2 size={16} />
-                    )}
-                  </button>
+                    <button
+                      disabled={deletingId === item._id}
+                      className="cursor-pointer p-2.5 rounded-xl bg-red-50 text-red-500 border border-red-100 hover:bg-red-500 hover:text-white transition-all duration-300 flex items-center justify-center min-w-[44px]"
+                    >
+                      {deletingId === item._id ? (
+                        <Loader2 className="animate-spin" size={18} />
+                      ) : (
+                        <Trash2 size={18} />
+                      )}
+                    </button>
+                  </ConfirmDelete>
                 </div>
               </div>
             </div>

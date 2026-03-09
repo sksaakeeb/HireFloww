@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import axios from "axios";
 
 const JobFormPage = () => {
-  // Initial state values are now empty strings
   const [formData, setFormData] = useState({
     companyName: "",
     location: "",
     jobRole: "",
     jobPackage: "",
     driveDate: "",
-    status: "Applied", // Defaulting to the first option
+    status: "Applied",
     notes: "",
   });
 
@@ -30,9 +30,11 @@ const JobFormPage = () => {
     setMessage({ type: "", text: "" });
 
     try {
-      await axios.post("http://localhost:5000/api/jobs/create-job", formData);
+      await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/jobs/create-job`,
+        formData,
+      );
       setMessage({ type: "success", text: "Job entry saved successfully!" });
-      // Reset form after success
       setFormData({
         companyName: "",
         location: "",
@@ -47,7 +49,7 @@ const JobFormPage = () => {
     } catch (error) {
       setMessage({
         type: "error",
-        text: "Failed to submit. Check your connection.",
+        text: "Please fill the form correctly.",
       });
       console.error(error);
     } finally {
@@ -62,11 +64,8 @@ const JobFormPage = () => {
     <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_right,var(--tw-gradient-stops))] from-blue-100 via-rose-100 to-indigo-100 flex items-center justify-center p-6">
       <div className="w-full max-w-2xl bg-white/30 backdrop-blur-xl border border-white/50 rounded-[2rem] shadow-2xl overflow-hidden">
         <div className="p-8 pb-4 text-center">
-          <div className="inline-block px-4 py-1.5 mb-3 bg-indigo-500/10 rounded-full text-indigo-600 text-xs font-bold uppercase tracking-widest">
-            Career Portal
-          </div>
           <h2 className="text-3xl font-black text-gray-800 tracking-tight">
-            Add New Opportunity
+            Add New Job
           </h2>
         </div>
 
@@ -75,7 +74,7 @@ const JobFormPage = () => {
             {/* Company Name */}
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-bold text-gray-600 ml-1">
-                Company
+                * Company
               </label>
               <input
                 type="text"
@@ -91,7 +90,7 @@ const JobFormPage = () => {
             {/* Location */}
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-bold text-gray-600 ml-1">
-                Location
+                * Location
               </label>
               <input
                 type="text"
@@ -106,7 +105,7 @@ const JobFormPage = () => {
             {/* Job Role */}
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-bold text-gray-600 ml-1">
-                Job Role
+                * Job Role
               </label>
               <input
                 type="text"
@@ -121,7 +120,7 @@ const JobFormPage = () => {
             {/* Package */}
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-bold text-gray-600 ml-1">
-                Package
+                * Package
               </label>
               <input
                 type="text"
@@ -165,10 +164,11 @@ const JobFormPage = () => {
                 onChange={handleChange}
                 className={inputClasses}
               >
+                {/* These "value" props must match your Mongoose enum exactly */}
                 <option value="Applied">Applied</option>
-                <option value="Interviewing">Interviewing</option>
-                <option value="Shortlisted">Shortlisted</option>
-                <option value="Offered">Offered</option>
+                {/* <option value="HR">HR Round</option>
+                <option value="Tech">Technical Round</option> */}
+                <option value="Offer">Offered</option>
                 <option value="Rejected">Rejected</option>
               </select>
             </div>

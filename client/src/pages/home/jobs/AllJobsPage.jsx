@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react"; // Swapped for a cleaner, more modern icon
-import AllJobs from "./components/AllJobs";
+import AllJobs from "../components/AllJobs";
 
 function AllJobsPage() {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ function AllJobsPage() {
       <div className="max-w-7xl mx-auto px-4 md:px-6 pt-6">
         {/* Modern Back Button */}
         <button
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/")}
           className="group flex items-center gap-2 px-3 py-1.5 
                      bg-white/20 backdrop-blur-md border border-white/50 
                      text-gray-600 rounded-xl shadow-sm

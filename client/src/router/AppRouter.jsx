@@ -7,18 +7,18 @@ import Loader from "../components/Loader";
 import Signup from "../pages/auth/Signup";
 import Login from "../pages/auth/Login";
 
-import DashboardPage from "../pages/home/DashboardPage";
-import UserProfilePage from "../pages/home/UserProfilePage";
+import DashboardPage from "../pages/home/main/DashboardPage";
+import UserProfilePage from "../pages/home/profile/UserProfilePage";
 
-import AllJobsPage from "@/pages/home/AllJobsPage";
-import JobFormPage from "../pages/home/JobFormPage";
-import JobDetailsPage from "../pages/home/JobDetailsPage";
-import UpdateJobPage from "@/pages/home/UpdateJobPage";
+import AllJobsPage from "@/pages/home/jobs/AllJobsPage";
+import JobFormPage from "../pages/home/jobs/JobFormPage";
+import JobDetailsPage from "../pages/home/jobs/JobDetailsPage";
+import UpdateJobPage from "@/pages/home/jobs/UpdateJobPage";
 
-import AllInterviewPage from "@/pages/home/AllInterviewPage";
-import InterviewFormPage from "@/pages/home/InterviewFormPage";
-import InterviewDetailsPage from "@/pages/home/InterviewDetailsPage";
-import UpdateInterviewPage from "@/pages/home/UpdateInterviewPage";
+import AllInterviewPage from "@/pages/home/interviews/AllInterviewPage";
+import InterviewFormPage from "@/pages/home/interviews/InterviewFormPage";
+import InterviewDetailsPage from "@/pages/home/interviews/InterviewDetailsPage";
+import UpdateInterviewPage from "@/pages/home/interviews/UpdateInterviewPage";
 
 // ProtectedRoute
 const ProtectedRoute = ({ children }) => {

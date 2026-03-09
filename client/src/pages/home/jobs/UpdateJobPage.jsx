@@ -11,6 +11,7 @@ import {
   ArrowLeft,
   Loader2,
   Save,
+  Calendar1,
 } from "lucide-react";
 
 const UpdateJob = () => {
@@ -110,8 +111,8 @@ const UpdateJob = () => {
         >
           <ArrowLeft size={20} /> Cancel Edit
         </button>
-        <h2 className="text-2xl font-black text-gray-800 tracking-tight italic">
-          Update Entry
+        <h2 className="text-2xl font-black text-gray-800 tracking-tight">
+          {/* Update Job */}
         </h2>
       </div>
 
@@ -200,21 +201,29 @@ const UpdateJob = () => {
             </div>
 
             {/* Date */}
-            <div className="space-y-2">
-              <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-bold text-gray-600 ml-1">
                 Drive Date
               </label>
+
+              {/* The relative wrapper must wrap BOTH the icon and the input */}
               <div className="relative">
                 <Calendar
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-indigo-400/60"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-indigo-400/60 pointer-events-none z-10"
                   size={18}
                 />
                 <input
-                  type="date"
+                  // Type switching logic for the placeholder
+                  type={formData.driveDate ? "date" : "text"}
                   name="driveDate"
                   value={formData.driveDate}
+                  placeholder="DD-MM-YYYY"
                   onChange={handleChange}
-                  className={inputClasses}
+                  onFocus={(e) => (e.target.type = "date")}
+                  onBlur={(e) => {
+                    if (!formData.driveDate) e.target.type = "text";
+                  }}
+                  className={`${inputClasses} pl-12 placeholder:text-gray-400 placeholder:font-semibold uppercase w-full`}
                 />
               </div>
             </div>
@@ -236,9 +245,7 @@ const UpdateJob = () => {
                   className={`${inputClasses} appearance-none`}
                 >
                   <option value="Applied">Applied</option>
-                  <option value="Interviewing">Interviewing</option>
-                  <option value="Shortlisted">Shortlisted</option>
-                  <option value="Offer">Offer</option>
+                  <option value="Offer">Offered</option>
                   <option value="Rejected">Rejected</option>
                 </select>
               </div>

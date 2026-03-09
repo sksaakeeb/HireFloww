@@ -11,8 +11,8 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-import Loader from "../../components/Loader";
-import InterviewTimeline from "./components/InterviewTimeline";
+import Loader from "@/components/Loader";
+import InterviewTimeline from "../components/InterviewTimeline";
 
 export default function JobDetailsPage() {
   const [job, setJob] = useState(null);
@@ -75,7 +75,7 @@ export default function JobDetailsPage() {
   return (
     <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_right,var(--tw-gradient-stops))] from-blue-50 via-rose-50 to-indigo-50 p-6 md:p-10 flex flex-col items-center">
       <button
-        onClick={() => navigate(-1)}
+        onClick={() => navigate("/")}
         className="self-start mb-6 flex items-center gap-2 text-gray-500 hover:text-indigo-600 font-bold transition-all"
       >
         <ArrowLeft size={18} /> Back to Dashboard

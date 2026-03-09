@@ -3,21 +3,17 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
   Calendar,
-  ArrowLeft,
   Search,
   ExternalLink,
-  Clock,
   Inbox,
   Trash2,
   Pencil,
   Building2,
-  Loader2,
-  ChevronRight,
+  ChevronLeft,
 } from "lucide-react";
 
-// Assuming these are your existing project components
-import Loader from "../../components/Loader";
-import ConfirmDelete from "../../components/ConfirmDelete";
+import Loader from "@/components/Loader";
+import ConfirmDelete from "@/components/ConfirmDelete";
 
 const AllInterviewsPage = () => {
   const [interviews, setInterviews] = useState([]);
@@ -26,7 +22,6 @@ const AllInterviewsPage = () => {
   const [deletingId, setDeletingId] = useState(null);
   const navigate = useNavigate();
 
-  // 1. Fetch Interviews (Leveraging Populate from Backend)
   const fetchInterviews = async () => {
     try {
       setLoading(true);
@@ -46,16 +41,13 @@ const AllInterviewsPage = () => {
     fetchInterviews();
   }, []);
 
-  // 2. Refined Delete Logic
   const handleDelete = async (id) => {
     try {
-      // Standardizing the delete call - check if your route is /interviews/:id
       await axios.delete(
         `${import.meta.env.VITE_API_BASE_URL}/interviews/${id}`,
         { withCredentials: true },
       );
 
-      // IMPORTANT: Update the interviews state, not jobs
       setInterviews((prev) => prev.filter((item) => item._id !== id));
     } catch (error) {
       console.error(
@@ -66,7 +58,6 @@ const AllInterviewsPage = () => {
     }
   };
 
-  // 3. Search Logic (Directly accessing populated jobId)
   const filteredInterviews = interviews.filter((item) => {
     const company = item.jobId?.companyName?.toLowerCase() || "";
     const role = item.jobId?.jobRole?.toLowerCase() || "";
@@ -90,18 +81,24 @@ const AllInterviewsPage = () => {
           <div className="space-y-2">
             <button
               onClick={() => navigate(-1)}
-              className="flex items-center gap-2 text-gray-400 hover:text-indigo-600 font-bold transition-all text-sm group"
+              className="group flex items-center gap-2 px-3 py-1.5 
+                     bg-white/20 backdrop-blur-md border border-white/50 
+                     text-gray-600 rounded-xl shadow-sm
+                     hover:bg-white/40 hover:text-indigo-600 
+                     transition-all duration-300 active:scale-95"
             >
-              <ArrowLeft
-                size={16}
+              <ChevronLeft
+                size={18}
                 className="group-hover:-translate-x-1 transition-transform"
               />
-              Dashboard
+              <span className="text-xs font-bold uppercase tracking-widest">
+                Back
+              </span>
             </button>
             <h1 className="text-4xl font-black text-gray-900 tracking-tight">
-              Interview{" "}
+              All{" "}
               <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-600 to-purple-600">
-                Timeline
+                Interviews
               </span>
             </h1>
           </div>

@@ -1,6 +1,7 @@
 import { Briefcase, Users, CheckCircle, XCircle, Activity } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import axios from "axios";
 
 import Loader from "@/components/Loader";
@@ -89,7 +90,7 @@ const DashboardStats = () => {
         <div
           key={index}
           onClick={() => navigate(card.path)}
-          className="relative overflow-hidden bg-white/30 backdrop-blur-xl border border-white/50 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all group"
+          className="cursor-pointer relative overflow-hidden bg-white/30 backdrop-blur-xl border border-white/50 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all group"
         >
           {/* Subtle Background Glow */}
           <div

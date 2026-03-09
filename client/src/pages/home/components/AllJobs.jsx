@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+
 import axios from "axios";
 
 import ConfirmDelete from "../../../components/ConfirmDelete";
@@ -58,7 +59,7 @@ function AllJobs() {
           All Jobs
         </h2>
         <p className="text-sm text-gray-500 font-medium">
-          Manage your active company pipeline
+          Manage your all jobs
         </p>
       </div>
 
@@ -72,11 +73,11 @@ function AllJobs() {
         </div>
       ) : allJobs.length > 0 ? (
         /* SEPARATED LIST STYLE */
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-1">
           {allJobs.map((job) => (
             <div
               key={job._id}
-              className="group flex flex-col md:flex-row md:items-center justify-between p-5 md:p-6 
+              className="group flex flex-col md:flex-row md:items-center justify-between p-5 md:p-5 
                          bg-white/30 backdrop-blur-2xl border border-white/60 rounded-[2rem] 
                          shadow-xl hover:shadow-2xl hover:bg-white/50 transition-all duration-300"
             >
@@ -102,7 +103,7 @@ function AllJobs() {
               <div className="flex items-center justify-end gap-3 mt-4 md:mt-0 pt-4 md:pt-0 border-t md:border-none border-white/10">
                 <button
                   onClick={() => handleView(job._id)}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 text-white text-[11px] font-black uppercase tracking-wider shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-all active:scale-95"
+                  className="cursor-pointer flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 text-white text-[11px] font-black uppercase tracking-wider shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-all active:scale-95"
                 >
                   View <ArrowUpRight size={14} />
                 </button>
@@ -112,7 +113,7 @@ function AllJobs() {
                   description={`Are you sure you want to delete ${job.companyName}?`}
                   onConfirm={() => handleDelete(job._id)}
                 >
-                  <button className="p-2.5 rounded-xl bg-red-50 text-red-500 border border-red-100 hover:bg-red-500 hover:text-white transition-all duration-300">
+                  <button className=" cursor-pointer p-2.5 rounded-xl bg-red-50 text-red-500 border border-red-100 hover:bg-red-500 hover:text-white transition-all duration-300">
                     <Trash2 size={18} />
                   </button>
                 </ConfirmDelete>

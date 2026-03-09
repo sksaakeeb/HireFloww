@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
-import { Diamond, PlusCircle } from "lucide-react";
+import { PlusCircle } from "lucide-react";
+
+import axios from "axios";
 
 export default function Header() {
   const [data, setData] = useState(null);
@@ -10,7 +11,7 @@ export default function Header() {
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_API_BASE_URL}/users/profile`,
-        { withCredentials: true }, // Added if your API requires cookies
+        { withCredentials: true },
       );
       setData(response.data);
     } catch (error) {
@@ -27,7 +28,7 @@ export default function Header() {
       {/* Glassmorphic Container */}
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-6 py-2 md:py-3 bg-white/30 backdrop-blur-xl border border-white/50 rounded-2xl shadow-lg">
         {/* Logo Section */}
-        <div className="flex items-center gap-2">
+        <div className="cursor-pointer flex items-center gap-2">
           <div className="w-8 h-8 bg-linear-to-tr from-indigo-600 to-purple-500 rounded-lg flex items-center justify-center shadow-md shrink-0">
             <span className="text-white font-black text-sm">H</span>
           </div>
