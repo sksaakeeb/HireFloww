@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 import Loader from "../../components/Loader";
+import InterviewTimeline from "./components/InterviewTimeline";
 
 export default function JobDetailsPage() {
   const [job, setJob] = useState(null);
@@ -152,74 +153,7 @@ export default function JobDetailsPage() {
         </div>
 
         {/* --- INTERVIEW TIMELINE SECTION --- */}
-        <div className="bg-white/20 backdrop-blur-xl border border-white/40 p-8 rounded-[3rem] shadow-xl">
-          <h2 className="text-2xl font-black text-gray-800 mb-8 flex items-center gap-3">
-            Interview Rounds{" "}
-            <span className="bg-indigo-500 text-white text-xs px-2 py-1 rounded-lg">
-              {interviews.length}
-            </span>
-          </h2>
-
-          {interviews.length > 0 ? (
-            <div className="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-linear-to-b before:from-transparent before:via-gray-300 before:to-transparent">
-              {interviews.map((item) => (
-                <div
-                  key={item._id}
-                  className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group"
-                >
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full border border-white bg-indigo-500 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
-                    <Calendar size={16} />
-                  </div>
-
-                  <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 rounded-3xl bg-white/60 border border-white/80 shadow-sm hover:shadow-md transition-all">
-                    <div className="flex items-center justify-between mb-2">
-                      <time className="text-xs font-black text-indigo-500 uppercase">
-                        {new Date(item.date).toLocaleDateString("en-GB", {
-                          day: "numeric",
-                          month: "short",
-                        })}
-                      </time>
-                      <span className="px-3 py-1 bg-white rounded-full text-[10px] font-bold text-gray-500 border border-gray-100 uppercase">
-                        {item.roundType}
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-600 leading-relaxed mb-4 line-clamp-2">
-                      {item.feedback || "No feedback recorded."}
-                    </p>
-
-                    <div className="flex flex-wrap gap-2">
-                      {item.assignment && (
-                        <a
-                          href={item.assignment}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-2 text-xs font-bold text-emerald-600 hover:text-emerald-700 bg-emerald-50 p-2 rounded-lg transition-colors"
-                        >
-                          <LinkIcon size={12} /> Task
-                        </a>
-                      )}
-
-                      {/* USE THE INTERVIEW _ID HERE TO FETCH PARTICULAR DETAILS */}
-                      <button
-                        onClick={() => navigate(`/interviews/${item._id}`)}
-                        className="inline-flex items-center gap-2 text-xs font-bold text-indigo-600 hover:text-indigo-700 bg-indigo-50 p-2 rounded-lg transition-colors"
-                      >
-                        <Eye size={12} /> Full View
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-10 bg-white/20 rounded-3xl border border-dashed border-gray-300">
-              <MessageSquare className="mx-auto text-gray-400 mb-2" size={32} />
-              <p className="text-gray-500 font-medium">
-                No interview rounds logged yet.
-              </p>
-            </div>
-          )}
-        </div>
+        <InterviewTimeline />
       </div>
     </div>
   );

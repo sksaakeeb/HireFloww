@@ -5,192 +5,185 @@ import {
   Calendar,
   ArrowLeft,
   Search,
-  Briefcase,
-  Link as LinkIcon,
+  ExternalLink,
   Clock,
   Inbox,
   Trash2,
   Pencil,
   Building2,
+  Loader2,
+  ChevronRight,
 } from "lucide-react";
+
+// Assuming these are your existing project components
 import Loader from "../../components/Loader";
 import ConfirmDelete from "../../components/ConfirmDelete";
 
 const AllInterviewsPage = () => {
-  // 1. Two separate states
   const [interviews, setInterviews] = useState([]);
-  const [jobs, setJobs] = useState([]);
-
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState(null);
   const navigate = useNavigate();
 
-  // 2. Separate Fetch for Interviews
+  // 1. Fetch Interviews (Leveraging Populate from Backend)
   const fetchInterviews = async () => {
     try {
+      setLoading(true);
       const res = await axios.get(
         `${import.meta.env.VITE_API_BASE_URL}/interviews/all-interview`,
         { withCredentials: true },
       );
-      setInterviews(
-        Array.isArray(res.data) ? res.data : res.data.interviews || [],
-      );
+      setInterviews(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
-      console.error("Interview Fetch Error:", err);
-    }
-  };
-
-  // 3. Separate Fetch for Jobs (to get the names)
-  const fetchJobs = async () => {
-    try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}/jobs/all-jobs`,
-        { withCredentials: true },
-      );
-      setJobs(Array.isArray(res.data) ? res.data : res.data.data || []);
-    } catch (err) {
-      console.error("Jobs Fetch Error:", err);
-    }
-  };
-
-  // Initial load
-  useEffect(() => {
-    const loadAllData = async () => {
-      setLoading(true);
-      await Promise.all([fetchInterviews(), fetchJobs()]);
+      console.error("Fetch Error:", err);
+    } finally {
       setLoading(false);
-    };
-    loadAllData();
+    }
+  };
+
+  useEffect(() => {
+    fetchInterviews();
   }, []);
 
-  // 4. Helper function to find the name in the JSX
-  const getCompanyName = (jobId) => {
-    const job = jobs.find((j) => j._id === jobId);
-    return job ? job.companyName : "Company Removed";
-  };
-
+  // 2. Refined Delete Logic
   const handleDelete = async (id) => {
     try {
+      // Standardizing the delete call - check if your route is /interviews/:id
       await axios.delete(
         `${import.meta.env.VITE_API_BASE_URL}/interviews/${id}`,
         { withCredentials: true },
       );
+
+      // IMPORTANT: Update the interviews state, not jobs
       setInterviews((prev) => prev.filter((item) => item._id !== id));
     } catch (error) {
-      console.error("Delete failed", error);
+      console.error(
+        "Interview Delete failed:",
+        error.response?.data || error.message,
+      );
+      alert("Failed to delete interview. Check console for details.");
     }
   };
 
-  // Search logic needs to check the helper function
+  // 3. Search Logic (Directly accessing populated jobId)
   const filteredInterviews = interviews.filter((item) => {
-    const companyName = getCompanyName(item.jobId).toLowerCase();
-    const roundType = (item.roundType || "").toLowerCase();
+    const company = item.jobId?.companyName?.toLowerCase() || "";
+    const role = item.jobId?.jobRole?.toLowerCase() || "";
+    const round = item.roundType?.toLowerCase() || "";
     const search = searchTerm.toLowerCase();
-    return companyName.includes(search) || roundType.includes(search);
+
+    return (
+      company.includes(search) ||
+      role.includes(search) ||
+      round.includes(search)
+    );
   });
 
   if (loading) return <Loader />;
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_right,var(--tw-gradient-stops))] from-slate-50 via-emerald-50 to-indigo-50 p-6 md:p-10">
-      <div className="max-w-5xl mx-auto">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,var(--tw-gradient-stops))] from-slate-50 via-white to-blue-50 p-6 md:p-12">
+      <div className="max-w-6xl mx-auto">
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
-          <div>
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-12">
+          <div className="space-y-2">
             <button
               onClick={() => navigate(-1)}
-              className="group flex items-center gap-2 text-gray-500 hover:text-indigo-600 font-bold transition-all mb-4"
+              className="flex items-center gap-2 text-gray-400 hover:text-indigo-600 font-bold transition-all text-sm group"
             >
-              <ArrowLeft size={18} /> Back
+              <ArrowLeft
+                size={16}
+                className="group-hover:-translate-x-1 transition-transform"
+              />
+              Dashboard
             </button>
-            <h1 className="text-4xl font-black text-gray-800 tracking-tighter">
-              Interview <span className="text-emerald-600">History</span>
+            <h1 className="text-4xl font-black text-gray-900 tracking-tight">
+              Interview{" "}
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-600 to-purple-600">
+                Timeline
+              </span>
             </h1>
           </div>
 
-          <div className="relative">
+          <div className="relative group w-full lg:w-96">
             <Search
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-              size={18}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-indigo-500 transition-colors"
+              size={20}
             />
             <input
               type="text"
-              placeholder="Search company or round..."
+              placeholder="Search by company or round..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-12 pr-6 py-3 bg-white/60 border border-white/80 rounded-2xl shadow-sm focus:ring-2 focus:ring-emerald-400 outline-none w-full md:w-80 backdrop-blur-sm transition-all"
+              className="w-full pl-12 pr-6 py-4 bg-white/60 backdrop-blur-xl border border-white rounded-[1.5rem] shadow-sm outline-none focus:ring-4 focus:ring-indigo-500/10 focus:bg-white transition-all font-medium text-gray-700"
             />
           </div>
         </div>
 
+        {/* Content Area */}
         {filteredInterviews.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {filteredInterviews.map((item) => (
               <div
                 key={item._id}
-                className="group bg-white/40 backdrop-blur-xl border border-white/60 p-6 rounded-[2.5rem] shadow-xl hover:shadow-2xl transition-all border-b-4 border-b-emerald-500/20 flex flex-col h-full"
+                className="group relative bg-white/40 backdrop-blur-2xl border border-white/80 p-6 rounded-[2.5rem] shadow-xl hover:shadow-2xl hover:shadow-indigo-100 transition-all duration-500 flex flex-col h-full border-t-4 border-t-indigo-500"
               >
-                <div className="flex justify-between items-start mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-3 bg-emerald-500/10 rounded-2xl text-emerald-600">
-                      <Calendar size={20} />
+                {/* Top Info */}
+                <div className="flex justify-between items-start mb-6">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-1.5">
+                      <Building2 size={12} className="text-indigo-500" />
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
+                        {item.jobId?.companyName || "Unknown"}
+                      </span>
                     </div>
-                    <div>
-                      {/* CALL HELPER FUNCTION HERE */}
-                      <div className="flex items-center gap-1.5 mb-1">
-                        <Building2 size={14} className="text-indigo-500" />
-                        <span className="text-[10px] font-black uppercase tracking-widest text-indigo-600">
-                          {getCompanyName(item.jobId)}
-                        </span>
-                      </div>
-
-                      <h3 className="font-black text-gray-800 text-lg uppercase leading-tight">
-                        {item.roundType}
-                      </h3>
-                      <p className="text-[10px] font-bold text-gray-400 flex items-center gap-1 uppercase mt-1">
-                        <Clock size={12} />{" "}
-                        {new Date(item.date).toLocaleDateString("en-GB")}
-                      </p>
-                    </div>
+                    <h3 className="text-xl font-black text-gray-800 leading-tight">
+                      {item.roundType}
+                    </h3>
                   </div>
                   <button
-                    onClick={() => navigate(`/job-details/${item.jobId}`)}
-                    className="p-2.5 bg-indigo-50 text-indigo-500 rounded-xl hover:bg-indigo-500 hover:text-white transition-all shadow-sm"
+                    onClick={() => navigate(`/job/${item.jobId?._id}`)}
+                    className="p-3 bg-white border border-gray-100 rounded-2xl text-gray-400 hover:text-indigo-600 hover:border-indigo-100 transition-all shadow-sm"
                   >
-                    <Briefcase size={16} />
+                    <ExternalLink size={18} />
                   </button>
                 </div>
 
-                <div className="p-4 bg-white/50 rounded-2xl border border-white/40 shadow-inner mb-4 flex-grow text-sm text-gray-600 italic">
-                  {item.feedback || "No feedback recorded."}
+                {/* Feedback Section */}
+                <div className="grow bg-white/50 rounded-3xl p-5 border border-white/50 shadow-inner mb-6">
+                  <p className="text-sm text-gray-600 font-medium italic leading-relaxed line-clamp-4">
+                    {item.feedback
+                      ? `"${item.feedback}"`
+                      : "No specific round feedback available."}
+                  </p>
                 </div>
 
-                <div className="flex items-center justify-between gap-3 mt-2">
-                  {item.assignment ? (
-                    <a
-                      href={item.assignment}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex items-center gap-2 text-[10px] font-black text-emerald-700 bg-emerald-100/50 px-4 py-2 rounded-xl uppercase"
-                    >
-                      <LinkIcon size={12} /> Assignment
-                    </a>
-                  ) : (
-                    <div />
-                  )}
+                {/* Footer Metadata */}
+                <div className="flex items-center justify-between pt-4 border-t border-white/40 mt-auto">
+                  <div className="flex items-center gap-2 text-indigo-600 font-bold text-xs bg-indigo-50 px-3 py-1.5 rounded-full">
+                    <Calendar size={14} />
+                    {new Date(item.date).toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "short",
+                    })}
+                  </div>
+
                   <div className="flex items-center gap-2">
                     <button
-                      onClick={() => navigate(`/edit-interview/${item._id}`)}
-                      className="p-2.5 bg-amber-50 text-amber-600 rounded-xl border border-amber-100"
+                      onClick={() => navigate(`/update-interview/${item._id}`)}
+                      className="p-2.5 bg-white text-amber-500 rounded-xl border border-amber-100 hover:bg-amber-500 hover:text-white transition-all shadow-sm"
                     >
                       <Pencil size={16} />
                     </button>
+
                     <ConfirmDelete
-                      title="Delete Entry?"
-                      onConfirm={() => handleDelete(item._id)}
+                      title="Delete Interview Round?"
+                      description="Are you sure you want to remove this round from your history?"
+                      onConfirm={() => handleDelete(item._id)} // Ensure item._id is correct
                     >
-                      <button className="p-2.5 bg-rose-50 text-rose-500 rounded-xl border border-rose-100">
-                        <Trash2 size={16} />
+                      <button className="p-2.5 rounded-xl bg-red-50 text-red-500 border border-red-100 hover:bg-red-500 hover:text-white transition-all duration-300">
+                        <Trash2 size={18} />
                       </button>
                     </ConfirmDelete>
                   </div>
@@ -199,9 +192,16 @@ const AllInterviewsPage = () => {
             ))}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center py-20 bg-white/20 rounded-[3rem] border-2 border-dashed border-gray-200">
-            <Inbox size={48} className="text-gray-300 mb-4" />
-            <p className="text-gray-500 font-bold">No interviews found.</p>
+          <div className="flex flex-col items-center justify-center py-24 bg-white/20 backdrop-blur-md rounded-[3.5rem] border-4 border-dashed border-white shadow-inner">
+            <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+              <Inbox size={32} className="text-gray-300" />
+            </div>
+            <p className="text-gray-400 font-black text-xl tracking-tight uppercase">
+              History Empty
+            </p>
+            <p className="text-gray-400 text-sm mt-1">
+              Refine your search or add a new interview round.
+            </p>
           </div>
         )}
       </div>
