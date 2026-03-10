@@ -10,6 +10,7 @@ import dashboardRoute from "./routes/dashboard.route.js";
 import userRoute from "./routes/profile.route.js";
 
 import { connDB } from "./configs/db.js";
+import { limiter } from "./utils/rateLimit.js";
 
 dotenv.config();
 
@@ -22,6 +23,8 @@ app.use(
     credentials: true,
   }),
 );
+
+app.use(limiter);
 
 app.use(express.json());
 
