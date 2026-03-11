@@ -186,7 +186,7 @@ export default function Profile() {
           {/* Avatar Card */}
           <div className="bg-white/40 backdrop-blur-xl border border-white/60 p-8 rounded-[2.5rem] shadow-xl flex flex-col md:flex-row items-center gap-8 transition-all">
             <div className="relative group">
-              <div className="w-32 h-32 rounded-full border-4 border-white shadow-lg overflow-hidden bg-gradient-to-tr from-indigo-100 to-purple-100 flex items-center justify-center">
+              <div className="w-32 h-32 rounded-full border-4 border-white shadow-lg overflow-hidden bg-linear-to-tr from-indigo-100 to-purple-100 flex items-center justify-center">
                 {formData.profileImage ? (
                   <img
                     src={formData.profileImage}
