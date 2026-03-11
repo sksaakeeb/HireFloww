@@ -8,9 +8,11 @@ import jobRoute from "./routes/job.route.js";
 import interviewRoute from "./routes/interview.route.js";
 import dashboardRoute from "./routes/dashboard.route.js";
 import userRoute from "./routes/profile.route.js";
+import imageRoute from "./routes/image.route.js";
 
 import { connDB } from "./configs/db.js";
 import { limiter } from "./utils/rateLimit.js";
+import { connectCloudinary } from "./configs/cloudinary.js";
 
 dotenv.config();
 
@@ -36,8 +38,10 @@ app.use("/api/jobs", jobRoute);
 app.use("/api/interviews", interviewRoute);
 app.use("/api/dashboard", dashboardRoute);
 app.use("/api/users", userRoute);
+app.use("/api/images", imageRoute);
 
 connDB().then(() => {
+  connectCloudinary();
   app.listen(PORT, () => {
     console.log(`Server is running on PORT: ${PORT}`);
   });

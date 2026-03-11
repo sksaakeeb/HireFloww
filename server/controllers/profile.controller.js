@@ -1,5 +1,6 @@
 import { User } from "../models/user.model.js";
 
+// Get-profile controller
 export const getProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id).select("-password");
@@ -13,20 +14,26 @@ export const getProfile = async (req, res) => {
   }
 };
 
+// Update-profile controller
 export const updateProfile = async (req, res) => {
-  const user = await User.findById(req.user._id);
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-  if (!user) {
-    res.status(404).json({ message: "User not found" });
+    user.fullName = req.body.fullName || user.fullName;
+    user.email = req.body.email || user.email;
+
+    const updatedUser = await user.save();
+
+    res.json({
+      _id: updatedUser._id,
+      fullName: updatedUser.fullName,
+      email: updatedUser.email,
+      profileImage: updatedUser.profileImage,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Update failed" });
   }
-
-  user.fullName = req.body.fullName || user.fullName;
-  user.email = req.body.email || user.email;
-
-  const updatedUser = await user.save();
-  res.json({
-    _id: updatedUser._id,
-    fullName: updatedUser.fullName,
-    email: updatedUser.email,
-  });
 };

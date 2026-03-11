@@ -20,6 +20,8 @@ import InterviewFormPage from "@/pages/home/interviews/InterviewFormPage";
 import InterviewDetailsPage from "@/pages/home/interviews/InterviewDetailsPage";
 import UpdateInterviewPage from "@/pages/home/interviews/UpdateInterviewPage";
 
+import NotFoundPage from "@/pages/not-found/NotFoundPage";
+
 // ProtectedRoute
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, isCheckingAuth } = useAuthStore();
@@ -73,6 +75,9 @@ function AppRouter() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+        {/* THE CATCH-ALL ROUTE */}
+        <Route path="*" element={<NotFoundPage />} />
 
         <Route
           path="/signup"
