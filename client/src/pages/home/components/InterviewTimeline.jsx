@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   Calendar,
-  Eye,
   Link as LinkIcon,
   MessageSquare,
   Loader2,
   Trash2,
 } from "lucide-react";
-import ConfirmDelete from "../../../components/ConfirmDelete";
+import axios from "axios";
+
+import ConfirmDelete from "../../../components/shared/ConfirmDelete";
 
 const InterviewTimeline = () => {
-  const { id } = useParams(); // This is the Job ID
+  const { id } = useParams(); // Job ID
   const navigate = useNavigate();
   const [interviews, setInterviews] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [deletingId, setDeletingId] = useState(null); // Fix: track specific deleting item
+  const [deletingId, setDeletingId] = useState(null);
 
   const fetchInterviews = async () => {
     try {
@@ -34,20 +34,14 @@ const InterviewTimeline = () => {
     }
   };
 
-  useEffect(() => {
-    fetchInterviews();
-  }, [id]);
-
-  // --- FIXED DELETE FUNCTION ---
   const handleDelete = async (interviewId) => {
-    setDeletingId(interviewId); // Set loading for this specific button
+    setDeletingId(interviewId);
     try {
       await axios.delete(
         `${import.meta.env.VITE_API_BASE_URL}/interviews/${interviewId}`,
         { withCredentials: true },
       );
 
-      // Optimistic Update: remove from UI immediately
       setInterviews((prev) => prev.filter((item) => item._id !== interviewId));
     } catch (error) {
       console.error(
@@ -59,6 +53,10 @@ const InterviewTimeline = () => {
       setDeletingId(null);
     }
   };
+
+  useEffect(() => {
+    fetchInterviews();
+  }, [id]);
 
   if (loading)
     return (
@@ -125,7 +123,6 @@ const InterviewTimeline = () => {
                     </button> */}
                   </div>
 
-                  {/* FIXED DELETE SECTION */}
                   <ConfirmDelete
                     title="Delete Interview Round?"
                     description="This action cannot be undone."

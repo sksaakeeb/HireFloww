@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
-import Loader from "@/components/Loader";
+import Loader from "@/components/shared/Loader";
 
 const DashboardStats = () => {
   const [loading, setLoading] = useState(true);

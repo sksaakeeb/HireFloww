@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useAuthStore } from "../store/authStore";
 
-import Loader from "../components/Loader";
+import Loader from "../components/shared/Loader";
 
 import Signup from "../pages/auth/Signup";
 import Login from "../pages/auth/Login";

@@ -14,7 +14,8 @@ import {
   Building2,
   MapPin,
 } from "lucide-react";
-import ConfirmDelete from "@/components/ConfirmDelete";
+
+import ConfirmDelete from "@/components/shared/ConfirmDelete";
 
 const InterviewDetails = () => {
   const { jobId } = useParams();
@@ -28,7 +29,6 @@ const InterviewDetails = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        // FIX: Re-enable the job details call so 'jobRes' is defined
         const [intRes, jobRes] = await Promise.all([
           axios.get(
             `${import.meta.env.VITE_API_BASE_URL}/interviews/${jobId}`,
@@ -72,7 +72,6 @@ const InterviewDetails = () => {
   return (
     <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-50 via-white to-slate-50 p-6 md:p-12">
       <div className="max-w-5xl mx-auto">
-        {/* --- SECTION 1: HEADER --- */}
         <div className="mb-12 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-4">
             <button
@@ -116,7 +115,6 @@ const InterviewDetails = () => {
           </button>
         </div>
 
-        {/* --- SECTION 2: TIMELINE --- */}
         {interviews.length > 0 ? (
           <div className="relative space-y-10 before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-indigo-100 before:via-indigo-300 before:to-transparent">
             {interviews.map((round, idx) => (

@@ -12,8 +12,8 @@ import {
   ChevronLeft,
 } from "lucide-react";
 
-import Loader from "@/components/Loader";
-import ConfirmDelete from "@/components/ConfirmDelete";
+import Loader from "@/components/shared/Loader";
+import ConfirmDelete from "@/components/shared/ConfirmDelete";
 
 const AllInterviewsPage = () => {
   const [interviews, setInterviews] = useState([]);

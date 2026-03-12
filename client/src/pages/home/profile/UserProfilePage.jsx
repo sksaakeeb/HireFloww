@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import axios from "axios";
 
-import ConfirmDelete from "@/components/ConfirmDelete";
+import ConfirmDelete from "@/components/shared/ConfirmDelete";
 
 export default function Profile() {
   const [formData, setFormData] = useState({

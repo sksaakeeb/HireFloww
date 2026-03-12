@@ -9,6 +9,7 @@ import interviewRoute from "./routes/interview.route.js";
 import dashboardRoute from "./routes/dashboard.route.js";
 import userRoute from "./routes/profile.route.js";
 import imageRoute from "./routes/image.route.js";
+import companyRoute from "./routes/company.route.js";
 
 import { connDB } from "./configs/db.js";
 import { limiter } from "./utils/rateLimit.js";
@@ -39,6 +40,7 @@ app.use("/api/interviews", interviewRoute);
 app.use("/api/dashboard", dashboardRoute);
 app.use("/api/users", userRoute);
 app.use("/api/images", imageRoute);
+app.use("/api/companies", companyRoute);
 
 connDB().then(() => {
   connectCloudinary();
