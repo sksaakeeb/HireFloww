@@ -70,7 +70,7 @@ const InterviewDetails = () => {
     );
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-50 via-white to-slate-50 p-6 md:p-12">
+    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-indigo-50 via-white to-slate-50 p-6 md:p-12">
       <div className="max-w-5xl mx-auto">
         <div className="mb-12 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-4">
@@ -116,7 +116,7 @@ const InterviewDetails = () => {
         </div>
 
         {interviews.length > 0 ? (
-          <div className="relative space-y-10 before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-indigo-100 before:via-indigo-300 before:to-transparent">
+          <div className="relative space-y-10 before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-linear-to-b before:from-indigo-100 before:via-indigo-300 before:to-transparent">
             {interviews.map((round, idx) => (
               <div
                 key={round._id}
