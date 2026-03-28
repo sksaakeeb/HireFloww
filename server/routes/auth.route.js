@@ -4,8 +4,8 @@ import {
   login,
   logout,
   verifyEmail,
-  forgotPassword,
-  resetPassword,
+  // forgotPassword,
+  // resetPassword,
   getMe,
 } from "../controllers/auth.controller.js";
 import { protectedRoute } from "../middlewares/auth.middleware.js";
@@ -19,7 +19,8 @@ router.post("/logout", logout);
 router.get("/check-auth", protectedRoute, getMe);
 
 router.post("/verify-email", verifyEmail);
-router.post("/forgot-password", forgotPassword);
-router.post("/reset-password", resetPassword);
+
+// router.post("/forgot-password", forgotPassword);
+// router.post("/reset-password", resetPassword);
 
 export default router;

@@ -4,7 +4,6 @@ import {
   Mail,
   User,
   ChevronRight,
-  Globe,
   Loader2,
   AlertCircle,
   CheckCircle2,
@@ -28,7 +27,7 @@ const Signup = () => {
 
     try {
       await signup(name, email, password);
-      navigate("/dashboard"); // Or wherever your flow leads
+      navigate("/dashboard");
     } catch (err) {
       const errMsg =
         err.response?.data?.message ||
@@ -41,16 +40,21 @@ const Signup = () => {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center p-6">
-      <div className="relative w-full max-w-5xl bg-white/60 backdrop-blur-2xl border border-white rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[650px]">
-        {/* --- LEFT COLUMN --- */}
+      <div className="relative w-full max-w-5xl bg-white/60 backdrop-blur-2xl border border-white rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-162.5">
+        {/* --- Left Column --- */}
         <div className="hidden md:flex md:w-[42%] p-12 flex-col justify-between bg-white/20 border-r border-white/40">
           <div className="space-y-8">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-200">
-                <Globe className="text-white w-6 h-6" />
+            <div className="flex items-center gap-1">
+              <div>
+                <img
+                  src="/logo.svg"
+                  height={35}
+                  width={35}
+                  alt="HireFloww Logo"
+                />
               </div>
-              <span className="font-black text-2xl tracking-tighter text-slate-800 uppercase">
-                NEXUS.
+              <span className="font-black text-2xl tracking-tighter">
+                HireFloww
               </span>
             </div>
 

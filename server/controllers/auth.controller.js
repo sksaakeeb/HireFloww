@@ -1,62 +1,82 @@
 import bcrypt from "bcryptjs";
 
 import { User } from "../models/user.model.js";
-import { generateToken } from "../utils/jwt.js";
+import { generateJWT } from "../utils/jwt.js";
+import { generateOTP } from "../utils/otp.js";
+import { sendVerificationEmail } from "../utils/sendMail.js";
 
-// Signup Controller
 export const signup = async (req, res) => {
   const { fullName, email, password } = req.body;
 
   try {
-    // 0. Basic Validation
     if (!fullName || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    // 1. Check If User Already Exists
-    const existingUser = await User.findOne({ email });
+    if (password.length < 6) {
+      return res
+        .status(400)
+        .json({ message: "Password must be at least 6 characters" });
+    }
+
+    const normalizedEmail = email.toLowerCase();
+
+    const existingUser = await User.findOne({ email: normalizedEmail });
+
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    // 2. Hash Password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // 3. Create New User
+    const OTP = generateOTP();
+
     const newUser = await User.create({
       fullName: fullName,
       email: email,
       password: hashedPassword,
+      verificationOTP: OTP,
+      verificationOTPExpiresAt: Date.now() + 1 * 60 * 60 * 1000,
     });
 
-    // 4. Generate JWT Utils
-    const token = generateToken(res, newUser._id);
+    await sendVerificationEmail(newUser.email, newUser.verificationOTP);
 
-    res
-      .status(201)
-      .json({ token, user: { id: newUser._id, fullName: newUser.fullName } });
+    res.status(201).json({
+      message: "Registration successful. Please verify your email.",
+      userId: newUser._id,
+    });
   } catch (error) {
-    res.status(500).json({ message: "Error in signup controller" });
+    res.status(500).json({ message: "Error creating account" });
   }
 };
 
-// Login Controller
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    const normalizedEmail = email.toLowerCase();
+
+    const user = await User.findOne({ email: normalizedEmail });
+
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
+
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const token = generateToken(res, user._id);
+    if (!user.isVerified) {
+      return res.status(401).json({
+        message: "Please verify your email before logging in.",
+      });
+    }
+
+    const token = generateJWT(res, user._id);
+
     res
       .status(200)
       .json({ token, user: { id: user._id, fullName: user.fullName } });
@@ -65,7 +85,6 @@ export const login = async (req, res) => {
   }
 };
 
-// Logout Controller
 export const logout = async (_, res) => {
   try {
     res.clearCookie("token");
@@ -75,7 +94,6 @@ export const logout = async (_, res) => {
   }
 };
 
-// Get Me Controller
 export const getMe = async (req, res) => {
   try {
     res.status(200).json({ user: req.user });
@@ -84,11 +102,33 @@ export const getMe = async (req, res) => {
   }
 };
 
-// Verify Email Controller
-export const verifyEmail = async (req, res) => {};
+export const verifyEmail = async (req, res) => {
+  const { code } = req.body;
 
-// Forgot Password Controller
-export const forgotPassword = async (req, res) => {};
+  if (!code) {
+    return res.status(400).json({ message: "OTP is required" });
+  }
 
-// Reset Password Controller
-export const resetPassword = async (req, res) => {};
+  try {
+    const user = await User.findOne({
+      verificationOTP: code,
+      verificationOTPExpiresAt: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+
+    user.isVerified = true;
+    user.verificationOTP = undefined;
+    user.verificationOTPExpiresAt = undefined;
+
+    await user.save();
+
+    // Send welcome email
+
+    return res.status(200).json({ message: "Email verified successfully" });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};

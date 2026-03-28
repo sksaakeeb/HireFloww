@@ -35,6 +35,30 @@ export const useAuthStore = create((set) => ({
     }
   },
 
+  login: async (email, password) => {
+    set({ isLoading: true, error: null });
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/auth/login`,
+        {
+          email,
+          password,
+        },
+      );
+      set({
+        user: response.data.user,
+        isAuthenticated: true,
+        isLoading: false,
+      });
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Error logging in",
+        isLoading: false,
+      });
+    }
+  },
+
   checkAuth: async () => {
     set({ isCheckingAuth: true });
     try {
